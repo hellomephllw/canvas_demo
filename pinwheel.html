@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<canvas id="mycanvas" width="900" height="800"></canvas>
+	<script>
+		var mycanvas = document.getElementById("mycanvas");
+		var ctx = mycanvas.getContext("2d");
+
+		var deg = 0;
+		setInterval(drawPinwheel, 10);
+
+		function drawPinwheel() {
+			ctx.clearRect(0, 0, mycanvas.width, mycanvas.height);//清空动画
+			/*画底座*/
+			ctx.beginPath();
+			ctx.fillStyle = "blue";
+			ctx.moveTo(250, 600);
+			ctx.lineTo(350, 600);
+			ctx.lineTo(320, 300);
+			ctx.lineTo(280, 300);
+			ctx.closePath();
+			ctx.arc(300, 300, 20, 0, 0.5 * Math.PI, true);
+			ctx.fill();
+			/*画风扇*/
+			for (var i = 0; i < 4; ++i) {//重新初始化动画的下一幕
+				deg += 1 / 360 * Math.PI;//计算好每次扇叶旋转的角度
+				if (deg === 2 * Math.PI) deg = 0;
+
+				ctx.save();//保存初始化状态
+				ctx.beginPath();//清空缓存
+				//旋转
+				ctx.translate(300, 300);
+				ctx.rotate((90 / 180 * i) * Math.PI - deg);
+				ctx.translate(-300, -300);
+				//画扇叶
+				ctx.fillStyle = "green";
+				ctx.moveTo(300, 300);
+				ctx.lineTo(300, 200);
+				ctx.arcTo(300, 80, 340, 100, 40);
+
+				ctx.fill();
+				ctx.restore();//回到保存状态
+			}
+		}
+
+	</script>
+</body>
+</html>
